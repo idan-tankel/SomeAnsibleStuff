@@ -1,4 +1,37 @@
 ---
-- name: Deploy and configure VM in VMware 
+- name: Deploy and configure VM in VMware
+  hosts: localhost
+  vars:
+    vcenter_server: vcetner1
+    administrator_password: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      32373330386330643061613237393466393363333031303965383063316338393261616134353233
+      6364623038303966323834396636646463613837373461380a303662373161393466326139383565
+      64396538393562343464666337633337353130306365666637373266393965633766366436623836
+      3430396234626533340a613637393563333131626665626535393462653139346563383062343535
+      6335
   vmware_guest:
-    
+    hostname: "{{ vcenter_server }}"
+    username: administrator@vsphere.local
+    password: "{{ administrator_password }}"
+    name: myFirstVM
+    template: MyTemplate
+    hardware:
+      num_cpus: 4 # these are 4 cpu sockets
+      version:
+        latest # use the latest hardware version available. Hardware version is the "vmware drivers version" and you should to
+        # set the lateset version available in your env
+      num_cpu_cores_per_socket: 2
+      memory_mb: 16384 # 16 GB ram allocation
+    networks:
+    # each dash here represent network interface that will be created
+      - connected: yes #connect at poweron
+        device_type: vmxnet3
+        dns_servers: 
+        - mydns1.mydomain.dom
+        - mydns2.mydomain.dom
+        domain: mydomain.dom
+        name: Front End PortGroup # this is the port group name to assign
+        type: dhcp
+        
+
