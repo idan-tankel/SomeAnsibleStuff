@@ -16,6 +16,7 @@
     password: "{{ administrator_password }}"
     name: myFirstVM
     template: MyTemplate
+    state: present
     hardware:
       num_cpus: 4 # these are 4 cpu sockets
       version:
@@ -33,5 +34,14 @@
         domain: mydomain.dom
         name: Front End PortGroup # this is the port group name to assign
         type: dhcp
-        
+
+      - connected: yes #connect at poweron
+        device_type: vmxnet3
+        dns_servers: 
+        - mydns1.mydomain.dom
+        - mydns2.mydomain.dom
+        domain: mydomain.dom
+        name: BackEnd PortGroup # this is the port group name to assign
+        type: dhcp
+      
 
