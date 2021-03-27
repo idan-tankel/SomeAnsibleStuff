@@ -1,0 +1,4 @@
+---
+- name: Deploy and configure VM in VMware 
+  vmware_guest:
+    
